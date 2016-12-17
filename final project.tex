@@ -1,0 +1,193 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+
+\begin{document}
+\title{Three-body problem involved Jupiter}
+\author{Xiaoyu He}
+\maketitle
+
+\begin{abstract}
+This paper mainly disscuss the three-body problem invovled Jupiter including the Sun-Earth-Jupiter system and the Kirkwood gap. We can approximate the solution of three-body problem by finding the gravitational force between the Earth and Jupiter and then use Euler-Cromer Method to update the positions and velocities. And finally we can simulate the orbit of these planets.
+\end{abstract}
+\section*{Sun-Earth-Jupiter}
+
+The problem of two objects in the planetary system can be solved exactly leading to Kepler's laws. However, if we add just one or more planet to give what is known as three-body problem, an analytic theory becomes much more difficult. Thus we need help from  computational physics. In fact, we can get a good approximation of three-body problem numerically.
+
+In this section, we consider one of the simplest three-body problems, the Sun-Earth-Jupiter system, to know how much effect the gravitational force from Jupiter has on Earth's motion. We consider Jupiter sinice it is the largest planet in the solar system.
+
+To simplify the problem, we assume that the orbit of Earth and Jupiter are circular and the sun is fixed in the center of the circle. The components of gravitational force due to Jupiter for Earth are shown in Figure 1. The gravitational force between Earth and Jupiter,
+\[
+F_{E,J}=\frac{GM_JM_E}{r_{EJ}^2}
+\]
+where $M_J$ is the mass of Jupiter and $r_EJ$ is the distance between Earth and Jupiter. Splitting this into components field,
+\[
+F_{EJ,x}=-\frac{GM_JM_E}{r_{EJ}^2}cos\theta_{EJ}=-\frac{GM_JM_E(x_e-x_j)}{r_{EJ}^3}
+\]
+for the x componet of the force, with a corresponding result for the y component. Here $x_e$ and $x_j$ are the coordinates of Earth and Jupiter (the sun remains at the origin), and $\theta_{EJ}$ is the angle defined in Figure 1. And the total force on Earth in the x direction will be the sum of the forces of gravity from the Sun and Jupiter,
+\[
+\frac{dv_{x,e}}{dt}=-\frac{GM_Sx_e}{r^3}-\frac{GM_J(x_e-x_j)}{r_{EJ}^3}
+\]
+where r is the distance from Earth to the Sun.
+\begin{figure}
+\centering
+\includegraphics[width=3.5in]{1} 
+\caption{Components of gravitational force due to Jupiter}
+\label{Fig:1} 
+\end{figure}
+
+And then we can use Euler-Cromer Method which is also called semi-implicit Euler method to update the positions and velocities of the two planets. 
+\[
+v_{n+1}=v_n+a\Delta t
+\]
+\[
+x_{n+1}=x_n+v_{n+1}\Delta t
+\]
+Here for the Earth, the Euler-Cromer Method should be:
+\[
+v_{x,i+1}=v_{x,i}-\frac{GM_Sx_i}{r_i^3}\Delta t-\frac{GM_J(x_i-x_{Ji})}{r_{EJ,i}^3}\Delta t
+\]
+\[
+x_{i+1}=x_i+v_{x,i+1}\Delta t
+\]
+for the x component, with a corresponding result for the y component. And we can use $GM_S=4\pi^2$ to simplify the calculation. And then we can make a plot of the orbits of Jupiter and Earth shown as Figure 2.
+\begin{figure}
+\centering
+\includegraphics[width=4in]{jupiter-earth} 
+\caption{The orbits of Jupiter and Earth}
+\label{Fig:2} 
+\end{figure}
+
+We don't use Euler method here since it is not a good choice for oscillatory problems, and the planetary motion is just such a problem. If we were to use the Euler method here we would find that the energy of the planet would grow with time, and it would spiral away from the sun. And so as to the RK4 method which is shown in Figure 3. This difficulty is avoided with the Euler-Cromer method, since it conserves energy exactly over the course of each orbit.
+
+\begin{figure}
+\centering
+\includegraphics[width=4in]{RK4} 
+\caption{Orbits using RK4 method}
+\label{Fig:3} 
+\end{figure}
+\begin{figure}
+\centering
+\includegraphics[width=4in]{jupiter10} 
+\caption{The orbits of Jupiter and Earth when Jupiter has 10 times its true mass}
+\label{Fig:4} 
+\end{figure}
+\begin{figure}
+\centering
+\includegraphics[width=4in]{jupiter100} 
+\caption{The orbits of Jupiter and Earth when Jupiter has 100 times its true mass}
+\label{Fig:5} 
+\end{figure}
+\begin{figure}
+\centering
+\includegraphics[width=4in]{jupiter1000} 
+\caption{The orbits of Jupiter and Earth when Jupiter has 1000 times its true mass}
+\label{Fig:6} 
+\end{figure}
+\begin{figure}
+\centering
+\includegraphics[width=4in]{jupiter1000-1} 
+\caption{The orbits of Jupiter and Earth when Jupiter has 1000 times its true mass(change initial conditions)}
+\label{Fig:7} 
+\end{figure}
+
+From Figure 2, we can see that the orbit of Earth is quite stable in a long term even I set the period up to ten thousand or million years. And then I amplify the mass of Jupiter to see what will happen on Earth. I set the mass of Jupiter  to be 10 times its true mass(Figure 4), 100 times its true mass(Figure 5), 1000 times its true mass(Figure 6). 
+
+We can find that Earth's orbit remains stable for a long time when Jupiter has 10 times mass; Earth's orbit has some perturbations when Jupiter has 100 times mass and Earth's orbit is completely unstable when Jupiter has 1000 times its true mass.
+
+And when I change the initial conditions of the 1000 times mass of Jupiter(Figure 7), the orbits perform completely differently because the trajectory is very sensitive to the initial conditions.
+
+\section*{Kirkwood gap}
+Now I'm going to disscuss another three-body problem invovled Jupiter. As we all known, the asteroid belt lies between Mars and Jupiter(shown in Figure 8). In the mid-1800s, the astronomer Daniel Kirkwood plotted the number of asteroids as a function of their distance from the sun. And then, he surprisingly found that there is some gaps in the distribution plot and the orbit radis of these asteroid in the gap is in resonance with Jupiter(shown in Figure 9).
+
+For example, the 2:1 gap, the gap at approximately 3.3 AU corresponds to an orbital period that is one half that of Jupiter's. That means an asteroid placed there would complete two orbits every time Jupiter completes one.
+
+And then I make a table of the asteroid in the vicinity of 2/1 Kirkwood gap, as follows.
+\begin{table}[h!]
+\centering
+\begin{tabular}{ ||c|c|c|| } 
+ \hline
+ Object & Radius(AU) & Velocity(AU/year) \\ 
+ \hline
+ \hline
+ Asteroid number 1 & 3.000 & 3.628\\ 
+ Asteroid number 2 & 3.276 & 3.471\\
+ Asteroid number 3 & 3.700 & 3.267\\
+ Jupiter & 5.200 & 2.755\\
+ \hline
+ \end{tabular}
+\caption{Asteroids in the vicinity of 2/1 Kirkwood gap}
+ \end{table}
+
+And then I make a plot of the asteroid orbits. Here, the problem is similar to the previous one. And we can neglect the gravitational force of each asteroid when computing the motion of Jupiter since the mass of asteroid is quite small compared to that of Jupiter. And we can also ignore the interactions between asteroids. I set the perioid as 100 times the period of Jupiter. Figure 10 shows the orbit of asteroid number 2 which is exactly in the gap. And Figure 11 shows the orbit of asteroid number 1 and number 3 which are near the gap.
+
+\begin{figure}
+\centering
+\includegraphics[width=3.5in]{10} 
+\caption{The asteroid belt}
+\label{Fig:8} 
+\end{figure}
+\begin{figure}
+\centering
+\includegraphics[width=3.5in]{11} 
+\caption{The Kikwood gap}
+\label{Fig:9} 
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=2.8in]{8} 
+\caption{The orbit of Asteroid number 2 which is in the gap}
+\label{Fig:10} 
+\end{figure}
+\begin{figure}
+\centering
+\includegraphics[width=2.8in]{9} 
+\caption{The orbit of Asteroid number 1 and 3 which is near the gap}
+\label{Fig:11} 
+\end{figure}
+
+From Figure 10 and Figure 11, we can find that the asteroid in the 2/1 gap is the one affected most strongly  by Jupiter. That's why there is no asteroid in the gap in reality.
+
+And then from the Figure 12(Kirkwood gap), we can make a table of all the gaps. We can get the data of orbital radius directly by reading the plot. And then use the Resonance number to calulate the orbital period of asteroids. And then calculate the orbital velocity.
+\begin{figure}
+\centering
+\includegraphics[width=3.5in]{6} 
+\caption{Kirkwood gap}
+\label{Fig:12} 
+\end{figure}
+
+For example, the orbital radius of the 3/1 gap is approximately 2.5AU. And because this is 3/1 gap, that means the asteroid complete three orbits every time Jupiter complete one. Therefore, the orbital period of asteroid in the 3/1 gap is 1/3 of that of Jupiter's. We've already known the period of Jupiter which is 11.85 years. So the period of asteroid is $11.85*\frac{1}{3}=3.95 year$. And then we can use $v=\frac{2\pi r}{T}$ to calculate the orbital velocity, shown in the table 2.
+\begin{table}[h!]
+\centering
+\begin{tabular}{ ||c|c|c|c|| } 
+ \hline
+ Resonance & Orbital Period(yr) & Orbital Radius(AU) & Orbital Velocity(AU/yr) \\ 
+ \hline
+ \hline
+ 3:1 & 3.95 & 2.5 & 3.977\\ 
+ 5:2 & 4.74 & 2.825 & 3.745\\
+ 7:3 & 5.08 & 2.95 & 3.649\\
+ 2:1 & 5.925 & 3.276 & 3.471\\
+ \hline
+ \end{tabular}
+\caption{The table of Kirkwood gap}
+ \end{table}
+
+Finally, we can make a plot using the data from table 2, shown in Figure 13 and Figure 14. Figure 13 shows the orbits of Jupiter and asteroids in the gap. The biggest black circle represents the orbit of Jupiter. Figure 14 shows the orbits of asteroids in the gap.(The orbit of Jupiter is not shown) We can find that all orbits in the gap is unstable, that's why there is no asteroid in the gap.
+\begin{figure}
+\centering
+\includegraphics[width=3.2in]{gap1} 
+\caption{The orbits of Jupiter and asteroid in the Kirkwood gap}
+\label{Fig:13} 
+\end{figure}
+\begin{figure}
+\centering
+\includegraphics[width=3.2in]{gap} 
+\caption{The orbits of asteroid in Kirkwood gap}
+\label{Fig:14} 
+\end{figure}
+
+\end{document}
